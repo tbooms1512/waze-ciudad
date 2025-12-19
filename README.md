@@ -420,10 +420,6 @@ curl "http://localhost:8000/certificates/zona?tipo_zona=colonia&nombre_zona=Narv
 
 Asegúrate de estar en la raíz del proyecto y que el entorno virtual esté activado.
 
-### Error: WeasyPrint no genera PDF
-
-Instala las dependencias del sistema (ver Paso 3).
-
 ### Error: CORS en el frontend
 
 Verifica que `API_BASE_URL` en `frontend/app.js` apunte a `http://localhost:8000`.
@@ -431,16 +427,6 @@ Verifica que `API_BASE_URL` en `frontend/app.js` apunte a `http://localhost:8000
 ### Error: No se encuentra el CSV
 
 Ejecuta `python backend/etl/download_c5.py` o `bash scripts/download_c5.sh`.
-
-### Error: Las opciones de filtros no se cargan
-
-- Verifica que la API esté corriendo en `http://localhost:8000`
-- Revisa la consola del navegador para ver errores de conexión
-- Asegúrate de que hay datos en la base de datos (ejecuta `process_c5.py`)
-
-### Error: "Debes proporcionar al menos un filtro"
-
-El endpoint `/stats/filtradas` requiere al menos uno de estos parámetros: `tipo_incidente`, `alcaldia` o `colonia`.
 
 ## 📚 Referencias
 
