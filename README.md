@@ -1,4 +1,4 @@
-# Waze Ciudadano CDMX 🚗
+# Mapa Ciudadano CDMX 🚗
 
 **Proyecto Final - Curso "Fuentes de Datos"**
 
@@ -6,7 +6,7 @@ Sistema completo de reportes ciudadanos de incidentes viales para la Ciudad de M
 
 ## 📋 Descripción General
 
-Este proyecto es una **mini-aplicación tipo Waze ciudadano** que permite:
+Este proyecto es una **mini-aplicación tipo maps** que permite:
 
 1. **Visualizar un mapa interactivo** de CDMX con incidentes viales
 2. **Registrar reportes ciudadanos** de incidentes (baches, choques, semáforos descompuestos, inundaciones, manifestaciones, etc.)
