@@ -175,6 +175,28 @@ header p {
     color: #999;
 }
 
+.report-item {
+    position: relative;
+}
+
+.btn-eliminar-reporte {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-eliminar-reporte:hover {
+    background: #c0392b;
+}
+
 .loading {
     text-align: center;
     color: #999;
@@ -347,6 +369,7 @@ header p {
     background-color: #f8f9fa;
     cursor: pointer;
     transition: all 0.3s;
+    position: relative;
 }
 
 .report-card:hover {
