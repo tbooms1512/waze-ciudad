@@ -183,21 +183,7 @@ pip install -r backend/requirements.txt
 sudo apt-get install libpango-1.0-0 libpangoft2-1.0-0 libfontconfig1 libcairo2 libgdk-pixbuf2.0-0
 ```
 
-### Paso 4: Descargar Datos del C5
-
-**Opción A: Usando script Python**
-```bash
-python backend/etl/download_c5.py
-```
-
-**Opción B: Usando script bash**
-```bash
-bash scripts/download_c5.sh
-```
-
-**Nota:** La URL del CSV puede cambiar. Verifica en [Datos Abiertos CDMX](https://datos.cdmx.gob.mx/dataset/incidentes-viales-c5) y actualiza la constante `C5_CSV_URL` en `backend/etl/download_c5.py` si es necesario.
-
-### Paso 5: Procesar Datos del C5
+### Paso 4: Procesar Datos del C5
 
 ```bash
 # Procesar CSV y cargar a base de datos
@@ -212,7 +198,7 @@ Esto:
 
 **Nota:** Es posible que necesites ajustar los nombres de columnas en `process_c5.py` según el esquema real del CSV del C5.
 
-### Paso 6: Inicializar Base de Datos
+### Paso 5: Inicializar Base de Datos
 
 La base de datos se inicializa automáticamente al arrancar la API, pero puedes hacerlo manualmente:
 
@@ -220,7 +206,7 @@ La base de datos se inicializa automáticamente al arrancar la API, pero puedes 
 python -c "from backend.database import init_db; init_db()"
 ```
 
-### Paso 7: Levantar la API Backend
+### Paso 6: Levantar la API Backend
 
 ```bash
 # Desde la raíz del proyecto
@@ -232,7 +218,7 @@ La API estará disponible en:
 - Documentación interactiva: http://localhost:8000/docs
 - Documentación alternativa: http://localhost:8000/redoc
 
-### Paso 8: Servir el Frontend
+### Paso 7: Servir el Frontend
 
 **Opción A: Live Server (VSCode)**
 1. Instala la extensión "Live Server" en VSCode
@@ -252,7 +238,7 @@ npx http-server frontend -p 5500
 
 Abre en el navegador: http://localhost:5500
 
-### Paso 9: Usar la Aplicación
+### Paso 8: Usar la Aplicación
 
 1. **Ver reportes en el mapa:** Los reportes se cargan automáticamente al abrir la página
 2. **Crear nuevo reporte:** Completa el formulario y haz clic en "Enviar Reporte"
