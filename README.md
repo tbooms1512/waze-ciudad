@@ -105,17 +105,7 @@ Este proyecto integra explícitamente todos los temas del curso "Fuentes de Dato
 - `backend/etl/process_c5.py` (procesamiento numérico de coordenadas y fechas)
 - `notebooks/01_exploracion_c5.ipynb`
 
-### 7. **certificados** - Generación de PDF
-- ✅ Plantilla HTML con Jinja2 (`backend/templates/certificado_zona.html`)
-- ✅ Conversión HTML→PDF con WeasyPrint
-- ✅ Certificados personalizados por zona con estadísticas
-
-**Archivos relevantes:**
-- `backend/services/certificates_service.py`
-- `backend/templates/certificado_zona.html`
-- `backend/routers/certificates.py` (endpoint `/certificates/zona`)
-
-### 8. **computo_distribuido** - Procesamiento Paralelo
+### 7. **computo_distribuido** - Procesamiento Paralelo
 - ✅ Uso de `multiprocessing.Pool` y `ProcessPoolExecutor`
 - ✅ Procesamiento de chunks grandes de datos en paralelo
 - ✅ Procesamiento de múltiples archivos históricos simultáneamente
@@ -123,7 +113,7 @@ Este proyecto integra explícitamente todos los temas del curso "Fuentes de Dato
 **Archivos relevantes:**
 - `backend/etl/distributed.py` (ejemplos didácticos de cómputo distribuido)
 
-### 9. **docker** y **dockerhub** - Contenedores
+### 8. **docker** y **dockerhub** - Contenedores
 - ✅ Dockerfile para backend con todas las dependencias
 - ✅ Dockerfile opcional para frontend (nginx)
 - ✅ docker-compose.yml para orquestar servicios
@@ -134,7 +124,7 @@ Este proyecto integra explícitamente todos los temas del curso "Fuentes de Dato
 - `docker/Dockerfile.frontend`
 - `docker/docker-compose.yml`
 
-### 10. **vscode** - Desarrollo en VSCode/Cursor
+### 9. **vscode** - Desarrollo en VSCode/Cursor
 - ✅ Estructura de proyecto clara y navegable
 - ✅ Type hints para mejor autocompletado
 - ✅ Configuración recomendada para debugging
