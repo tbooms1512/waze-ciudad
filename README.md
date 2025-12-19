@@ -253,10 +253,6 @@ Abre en el navegador: http://localhost:5500
 - `GET /stats/top-zonas?tipo_zona=colonia&limit=10` - Top zonas con más incidentes
 - `GET /stats/horas-peligrosas` - Distribución de incidentes por hora
 
-### Certificados
-
-- `GET /certificates/zona?tipo_zona=colonia&nombre_zona=Narvarte Poniente` - Genera certificado PDF
-
 ### Health Check
 
 - `GET /health` - Verificar estado de la API
