@@ -167,12 +167,6 @@ source venv/bin/activate
 pip install -r backend/requirements.txt
 ```
 
-**Nota para WeasyPrint:** Si planeas generar certificados PDF, necesitarás instalar dependencias del sistema. En Ubuntu/Debian:
-
-```bash
-sudo apt-get install libpango-1.0-0 libpangoft2-1.0-0 libfontconfig1 libcairo2 libgdk-pixbuf2.0-0
-```
-
 ### Paso 4: Procesar Datos del C5
 
 ```bash
