@@ -281,8 +281,8 @@ docker-compose up --build
 ```
 
 Esto levantará:
-- Backend en http://localhost:8000
-- Frontend en http://localhost:8080
+- Backend en http://localhost:8000/docs
+- Frontend en http://localhost:5500
 
 ### Subir a DockerHub
 
