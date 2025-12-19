@@ -8,6 +8,7 @@ venv/
 env/
 ENV/
 .venv
+venv.backup.*/
 pip-log.txt
 pip-delete-this-directory.txt
 
