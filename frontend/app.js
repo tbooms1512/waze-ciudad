@@ -81,10 +81,11 @@ async function cargarReportes() {
             lista.innerHTML = '<p>No hay reportes</p>';
         } else {
             lista.innerHTML = data.slice(0, 10).map(function(r) {
-                return '<div class="report-item">' +
+                return '<div class="report-item" data-report-id="' + r.id + '">' +
                     '<strong>' + r.tipo + '</strong>' +
                     '<p>' + (r.colonia || r.alcaldia || 'Sin ubicación') + '</p>' +
                     '<small>' + new Date(r.created_at).toLocaleString('es-MX') + '</small>' +
+                    '<button class="btn-eliminar-reporte" onclick="eliminarReporte(' + r.id + ')" title="Eliminar reporte">🗑️ Eliminar</button>' +
                     '</div>';
             }).join('');
         }
@@ -149,6 +150,7 @@ async function loadAllReportsModal() {
                 '</div>' +
                 (rep.descripcion ? '<div class="description">' + rep.descripcion + '</div>' : '') +
                 '<div style="margin-top:10px;"><small>Lat: ' + rep.lat.toFixed(6) + ', Lon: ' + rep.lon.toFixed(6) + '</small></div>' +
+                '<button class="btn-eliminar-reporte" onclick="event.stopPropagation(); eliminarReporte(' + rep.id + ')" title="Eliminar reporte">🗑️ Eliminar</button>' +
                 '</div>';
         }).join('');
         
@@ -560,6 +562,37 @@ function verStatsDetalladas() {
     
     document.getElementById('allStatsContainer').innerHTML = html;
 }
+
+async function eliminarReporte(reportId) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este reporte?')) {
+        return;
+    }
+    
+    try {
+        const r = await fetch(`${API_BASE_URL}/reports/${reportId}`, {
+            method: 'DELETE'
+        });
+        
+        if (!r.ok) {
+            if (r.status === 404) {
+                alert('Reporte no encontrado');
+            } else {
+                throw new Error('Error al eliminar reporte');
+            }
+            return;
+        }
+        
+        alert('Reporte eliminado exitosamente');
+        cargarReportes(); // Recargar reportes y mapa
+        
+    } catch(error) {
+        console.error('Error:', error);
+        alert('Error al eliminar reporte: ' + error.message);
+    }
+}
+
+// Exponer función globalmente para onclick
+window.eliminarReporte = eliminarReporte;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Inicializando...');

@@ -4,6 +4,7 @@ Router para endpoints de reportes ciudadanos.
 Endpoints:
 - POST /reports: crear nuevo reporte
 - GET /reports: listar reportes con filtros opcionales
+- DELETE /reports/{report_id}: eliminar un reporte
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -65,4 +66,21 @@ def get_reports(
     
     reports = query.order_by(UserReport.created_at.desc()).limit(limit).all()
     return reports
+
+
+@router.delete("/{report_id}", status_code=204)
+def delete_report(report_id: int, db: Session = Depends(get_db)):
+    """
+    Elimina un reporte ciudadano.
+    
+    Retorna 204 si se elimina exitosamente, 404 si no existe.
+    """
+    db_report = db.query(UserReport).filter(UserReport.id == report_id).first()
+    
+    if not db_report:
+        raise HTTPException(status_code=404, detail="Reporte no encontrado")
+    
+    db.delete(db_report)
+    db.commit()
+    return None
 
