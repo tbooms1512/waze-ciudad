@@ -11,7 +11,7 @@ Este proyecto es una **mini-aplicación tipo Waze ciudadano** que permite:
 1. **Visualizar un mapa interactivo** de CDMX con incidentes viales
 2. **Registrar reportes ciudadanos** de incidentes (baches, choques, semáforos descompuestos, inundaciones, manifestaciones, etc.)
 3. **Combinar datos ciudadanos con datos históricos oficiales** del C5 (Datos Abiertos CDMX)
-4. **Analizar estadísticas** por zona (colonias, alcaldías, horas del día)
+4. **Consultar estadísticas avanzadas con filtros** por tipo de incidente, alcaldía, colonia y hora del día
 5. **Generar certificados PDF** de riesgo vial por colonia o alcaldía
 6. **Procesar grandes volúmenes de datos** usando cómputo distribuido
 
@@ -91,9 +91,10 @@ Este proyecto integra explícitamente todos los temas del curso "Fuentes de Dato
 - ✅ ETL completo de datos C5
 
 **Archivos relevantes:**
-- `backend/etl/process_c5.py` (ETL con pandas)
-- `backend/services/stats_service.py` (análisis con pandas)
+- `backend/etl/process_c5.py` (ETL con pandas para procesamiento de CSV)
 - `notebooks/01_exploracion_c5.ipynb` (exploración interactiva)
+
+**Nota:** El servicio de estadísticas (`backend/services/stats_service.py`) ahora usa SQLAlchemy directamente para mejor rendimiento, aunque pandas sigue siendo usado en el ETL.
 
 ### 6. **numpy** - Cálculos Numéricos
 - ✅ Estadísticas descriptivas (media, mediana, percentiles)
@@ -101,7 +102,7 @@ Este proyecto integra explícitamente todos los temas del curso "Fuentes de Dato
 - ✅ Integración con pandas para análisis numérico
 
 **Archivos relevantes:**
-- `backend/services/stats_service.py`
+- `backend/etl/process_c5.py` (procesamiento numérico de coordenadas y fechas)
 - `notebooks/01_exploracion_c5.ipynb`
 
 ### 7. **certificados** - Generación de PDF
@@ -256,7 +257,10 @@ Abre en el navegador: http://localhost:5500
 1. **Ver reportes en el mapa:** Los reportes se cargan automáticamente al abrir la página
 2. **Crear nuevo reporte:** Completa el formulario y haz clic en "Enviar Reporte"
 3. **Usar mi ubicación:** Haz clic en "Usar Mi Ubicación" para obtener coordenadas automáticamente
-4. **Ver estadísticas:** Haz clic en "Cargar Top Zonas" en el panel de estadísticas
+4. **Consultar estadísticas avanzadas:** 
+   - Usa el panel "Consultar Estadísticas" en el sidebar para filtrar por tipo, alcaldía o colonia
+   - O haz clic en "Ver Estadísticas" para abrir el modal con filtros avanzados
+   - Las opciones de filtros se cargan dinámicamente desde la API
 
 ## 📊 Endpoints de la API
 
@@ -266,6 +270,15 @@ Abre en el navegador: http://localhost:5500
 - `GET /reports` - Listar reportes (con filtros opcionales: `?tipo=bache&alcaldia=Benito Juárez&limit=50`)
 
 ### Estadísticas
+
+#### Nuevos Endpoints (con filtros avanzados)
+
+- `GET /stats/opciones` - Obtiene las opciones disponibles para filtros (tipos de incidente, alcaldías, colonias)
+- `GET /stats/filtradas?tipo_incidente=X&alcaldia=Y&colonia=Z&limit=50` - Estadísticas filtradas con múltiples criterios
+  - Requiere al menos un filtro: `tipo_incidente`, `alcaldia` o `colonia`
+  - Retorna: total de incidentes, top colonias, top tipos, distribución por hora
+
+#### Endpoints Legacy (mantenidos por compatibilidad)
 
 - `GET /stats/top-zonas?tipo_zona=colonia&limit=10` - Top zonas con más incidentes
 - `GET /stats/horas-peligrosas` - Distribución de incidentes por hora
@@ -345,6 +358,7 @@ Si la URL del CSV cambia, edita:
 
 El CSV del C5 puede tener nombres de columnas diferentes. Ajusta el mapeo en:
 - `backend/etl/process_c5.py` (diccionario `column_mapping`)
+- **Mapeo actual:** `incidente_c4` → `tipo_incidente`, `alcaldia_catalogo` → `alcaldia`, `colonia_catalogo` → `colonia`
 
 ### Cambiar Base de Datos a Postgres
 
@@ -373,7 +387,33 @@ curl -X POST "http://localhost:8000/reports" \
   }'
 ```
 
-### Obtener Top Colonias
+### Consultar Estadísticas desde el Frontend
+
+El frontend incluye un sistema completo de filtros:
+- **Panel lateral:** Filtros básicos con opciones dinámicas
+- **Modal avanzado:** Sistema de filtros con resultados detallados en tablas
+- **Carga dinámica:** Las opciones de filtros se cargan automáticamente desde la API
+
+### Obtener Opciones de Filtros
+
+```bash
+curl "http://localhost:8000/stats/opciones"
+```
+
+### Consultar Estadísticas Filtradas
+
+```bash
+# Filtrar por tipo de incidente
+curl "http://localhost:8000/stats/filtradas?tipo_incidente=Choque&limit=20"
+
+# Filtrar por alcaldía
+curl "http://localhost:8000/stats/filtradas?alcaldia=Benito Juárez&limit=50"
+
+# Filtrar por múltiples criterios
+curl "http://localhost:8000/stats/filtradas?tipo_incidente=Choque&alcaldia=Benito Juárez&limit=30"
+```
+
+### Obtener Top Colonias (endpoint legacy)
 
 ```bash
 curl "http://localhost:8000/stats/top-zonas?tipo_zona=colonia&limit=5"
@@ -426,6 +466,16 @@ Verifica que `API_BASE_URL` en `frontend/app.js` apunte a `http://localhost:8000
 
 Ejecuta `python backend/etl/download_c5.py` o `bash scripts/download_c5.sh`.
 
+### Error: Las opciones de filtros no se cargan
+
+- Verifica que la API esté corriendo en `http://localhost:8000`
+- Revisa la consola del navegador para ver errores de conexión
+- Asegúrate de que hay datos en la base de datos (ejecuta `process_c5.py`)
+
+### Error: "Debes proporcionar al menos un filtro"
+
+El endpoint `/stats/filtradas` requiere al menos uno de estos parámetros: `tipo_incidente`, `alcaldia` o `colonia`.
+
 ## 📚 Referencias
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
@@ -445,6 +495,23 @@ Este es un proyecto educativo. Siéntete libre de:
 ## 📄 Licencia
 
 Este proyecto es de uso educativo. Los datos del C5 son públicos y provienen de Datos Abiertos CDMX.
+
+## 🆕 Cambios Recientes
+
+### Sistema de Estadísticas Mejorado
+
+- ✅ **Nuevos endpoints de filtros:** `/stats/opciones` y `/stats/filtradas`
+- ✅ **Frontend mejorado:** Sistema de filtros dinámicos con modal interactivo
+- ✅ **Optimización:** El servicio de estadísticas ahora usa SQLAlchemy directamente para mejor rendimiento
+- ✅ **Mapeo de columnas actualizado:** Soporte para nombres de columnas del CSV real del C5
+
+### Características del Frontend
+
+- Mapa interactivo con marcadores arrastrables
+- Formulario de reportes con geolocalización
+- Panel de estadísticas con filtros dinámicos
+- Modal de estadísticas detalladas con tablas
+- Carga automática de opciones de filtros desde la API
 
 ---
 
