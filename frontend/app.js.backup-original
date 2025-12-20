@@ -1,13 +1,8 @@
-const API_BASE_URL = (window.location.port === '5500' || 
-                      window.location.hostname.includes('ngrok') ||
-                      window.location.hostname.includes('railway'))
-    ? "/api"  // Docker o producción: usa proxy de nginx
-    : "http://localhost:8000";  // Desarrollo local directo
+const API_BASE_URL = window.location.port === '5500'
+    ? "/api"                        // Docker: usa nginx proxy
+    : "http://localhost:8000";      // Local: directo al backend
 
-console.log('🔧 Puerto:', window.location.port);
-console.log('🔧 Hostname:', window.location.hostname);
 console.log('🔧 API URL:', API_BASE_URL);
-
 let map, markers = [];
 let dragMarker = null;
 
@@ -93,7 +88,7 @@ async function cargarReportes() {
                 return '<div class="report-item" data-report-id="' + r.id + '">' +
                     '<strong>' + r.tipo + '</strong>' +
                     '<p>' + (r.colonia || r.alcaldia || 'Sin ubicación') + '</p>' +
-                    '<small>' + new Date(r.created_at).toLocaleString('es-MX', {timeZone: 'America/Mexico_City'}) + '</small>' +
+                    '<small>' + new Date(r.created_at).toLocaleString('es-MX') + '</small>' +
                     '<button class="btn-eliminar-reporte" onclick="eliminarReporte(' + r.id + ')" title="Eliminar reporte">🗑️ Eliminar</button>' +
                     '</div>';
             }).join('');
@@ -154,7 +149,7 @@ async function loadAllReportsModal() {
             return '<div class="report-card" onclick="verEnMapa(' + rep.lat + ',' + rep.lon + ')">' +
                 '<h3>📍 ' + rep.tipo + '</h3>' +
                 '<div class="meta">' +
-                '<span>📅 ' + new Date(rep.created_at).toLocaleString('es-MX', {timeZone: 'America/Mexico_City'}) + '</span>' +
+                '<span>📅 ' + new Date(rep.created_at).toLocaleString('es-MX') + '</span>' +
                 '<span>🏘️ ' + (rep.colonia || rep.alcaldia || 'Sin ubicación') + '</span>' +
                 '</div>' +
                 (rep.descripcion ? '<div class="description">' + rep.descripcion + '</div>' : '') +

@@ -10,6 +10,8 @@ services:
       - ../data:/app/data
     environment:
       - PYTHONUNBUFFERED=1
+    networks:
+      - waze-network
 
   frontend:
     build:
@@ -20,3 +22,9 @@ services:
       - "5500:80"
     depends_on:
       - backend
+    networks:
+      - waze-network
+
+networks:
+  waze-network:
+    driver: bridge
