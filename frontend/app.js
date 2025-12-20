@@ -1,4 +1,8 @@
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = window.location.port === '5500'
+    ? "/api"                        // Docker: usa nginx proxy
+    : "http://localhost:8000";      // Local: directo al backend
+
+console.log('🔧 API URL:', API_BASE_URL);
 let map, markers = [];
 let dragMarker = null;
 
